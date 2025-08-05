@@ -886,7 +886,7 @@
         // Chave para armazenar os dados no localStorage
         const LOCAL_STORAGE_KEY = 'interviewCandidates';
         // Senha secreta (PARA FINS DE DEMONSTRAÇÃO - NÃO USE EM PRODUÇÃO!)
-        const SECRET_PASSWORD = "#Ark343390123"; //
+        const SECRET_PASSWORD = "suasenha"; // <-- Altere esta senha!
 
         // Variável para controlar se o usuário está "autenticado" na sessão
         let isAuthenticated = false;
@@ -977,7 +977,7 @@
 
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(candidates));
                 clearForm(); // Limpa o formulário após salvar
-                showCandidates(); // Volta para a lista de candidatos
+                showForm(); // <--- Alterado para permanecer na aba do formulário
             } catch (e) {
                 console.error("Erro ao salvar/atualizar candidato no localStorage: ", e);
                 showMessage(`Erro ao salvar/atualizar candidato: ${e.message}`, 'error');
