@@ -258,21 +258,21 @@
             display: none; /* Escondido por padrão */
         }
 
-        /* Novo estilo para a mensagem de formulário */
-        #formMessageBox {
-            background-color: #d1fae5; /* Verde claro para sucesso */
-            color: #065f46; /* Verde escuro */
+        /* Novo estilo para a mensagem de formulário (removido, mas mantido para referência de ajuste) */
+        /* #formMessageBox {
+            background-color: #d1fae5;
+            color: #065f46;
             padding: 10px;
             border-radius: 8px;
-            margin-top: 20px; /* Espaçamento acima */
-            margin-bottom: 15px; /* Espaçamento abaixo */
+            margin-top: 20px;
+            margin-bottom: 15px;
             text-align: center;
             font-weight: bold;
-            display: none; /* Escondido por padrão */
-            width: fit-content; /* Ajusta a largura ao conteúdo */
-            margin-left: auto; /* Centraliza */
-            margin-right: auto; /* Centraliza */
-        }
+            display: none;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        } */
 
         .loading-indicator {
             text-align: center;
@@ -366,6 +366,23 @@
             color: #4a5568;
         }
 
+        /* Novo estilo para o modal de sucesso */
+        #successMessageModal .modal-content {
+            background-color: #d1fae5; /* Verde claro */
+            color: #065f46; /* Verde escuro */
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(6, 95, 70, 0.2);
+            max-width: 400px;
+            width: 80%;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        #successMessageModal .modal-content .close-button {
+            color: #065f46;
+        }
+
+
         /* Estilos para impressão */
         @media print {
             body {
@@ -386,7 +403,7 @@
                 color: #000; /* Títulos pretos */
                 font-weight: bold; /* Negrito na impressão */
             }
-            .button-group, .message-box, .loading-indicator, .modal-overlay, #formMessageBox {
+            .button-group, .message-box, .loading-indicator, .modal-overlay, #formMessageBox, #successMessageModal {
                 display: none; /* Esconde elementos não essenciais na impressão */
             }
             .answer {
@@ -791,14 +808,9 @@
                 </div>
             </div>
 
-            <div id="formMessageBox" class="message-box"></div> <!-- Nova caixa de mensagem para o formulário -->
-
             <div class="button-group">
-                <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display: none;">
-                <button class="btn btn-secondary" onclick="document.getElementById('cvFileInput').click()">Arquivar seu C.V</button>
                 <button class="btn" onclick="saveFormData()">Salvar Formulário</button>
             </div>
-            <p id="cvFileNameDisplay" class="text-center text-sm text-gray-600 mt-2"></p>
         </div>
 
         <div id="candidates-list-section">
@@ -881,12 +893,20 @@
         </div>
     </div>
 
+    <!-- Novo Modal de Mensagem de Sucesso -->
+    <div id="successMessageModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeSuccessMessageModal()">&times;</button>
+            <p id="successMessageText"></p>
+        </div>
+    </div>
+
     <script>
         // Elementos DOM
         const formSection = document.getElementById('form-section');
         const candidatesListSection = document.getElementById('candidates-list-section');
         const messageBox = document.getElementById('messageBox'); // Mensagem geral (topo)
-        const formMessageBox = document.getElementById('formMessageBox'); // Nova mensagem para o formulário
+        // const formMessageBox = document.getElementById('formMessageBox'); // Removido
         const loadingIndicator = document.getElementById('loadingIndicator');
         const candidatesTableBody = document.querySelector('#candidatesTable tbody');
         const currentCandidateIdInput = document.getElementById('currentCandidateId');
@@ -905,18 +925,17 @@
         const candidateDetailsTitle = document.getElementById('candidateDetailsTitle');
         const candidateDetailsContent = document.getElementById('candidateDetailsContent');
 
-        const cvFileInput = document.getElementById('cvFileInput');
-        const cvFileNameDisplay = document.getElementById('cvFileNameDisplay');
+        const successMessageModal = document.getElementById('successMessageModal');
+        const successMessageText = document.getElementById('successMessageText');
 
         // Chave para armazenar os dados no localStorage
         const LOCAL_STORAGE_KEY = 'interviewCandidates';
-        // Senha secreta (PARA FINS DE DEMONSTRAÇÃO - NÃO USE EM PRODUÇÃO!)
-        const SECRET_PASSWORD = "suasenha"; // <-- Altere esta senha!
+        const SECRET_PASSWORD = "#Banana@343390"; // 
 
         // Variável para controlar se o usuário está "autenticado" na sessão
         let isAuthenticated = false;
 
-        // Função para exibir mensagens (pode ser geral ou específica do formulário)
+        // Função para exibir mensagens (geral, não mais específica do formulário)
         function showMessage(message, type = 'success', targetElement = messageBox) {
             targetElement.textContent = message;
             targetElement.className = 'message-box'; // Reset classes
@@ -941,15 +960,6 @@
             showForm();
         });
 
-        // Event listener para o input de arquivo (para exibir o nome do arquivo)
-        cvFileInput.addEventListener('change', (event) => {
-            if (event.target.files.length > 0) {
-                cvFileNameDisplay.textContent = `CV selecionado: ${event.target.files[0].name}`;
-            } else {
-                cvFileNameDisplay.textContent = '';
-            }
-        });
-
         // Função para coletar todos os dados do formulário
         function getFormData() {
             const formData = {};
@@ -959,8 +969,6 @@
                     formData[element.name] = element.value;
                 }
             });
-            // Adiciona o nome do arquivo CV ao formData
-            formData.cvFileName = cvFileInput.files.length > 0 ? cvFileInput.files[0].name : '';
             return formData;
         }
 
@@ -972,10 +980,6 @@
                     element.value = data[key];
                 }
             }
-            // Exibe o nome do arquivo CV ao carregar para edição
-            cvFileNameDisplay.textContent = data.cvFileName ? `CV selecionado: ${data.cvFileName}` : '';
-            // Limpa o input de arquivo real (não é possível pré-preencher)
-            cvFileInput.value = '';
         }
 
         // Função para limpar o formulário
@@ -987,8 +991,6 @@
                 }
             });
             currentCandidateIdInput.value = ''; // Limpa o ID do candidato atual
-            cvFileInput.value = ''; // Limpa o input de arquivo
-            cvFileNameDisplay.textContent = ''; // Limpa o display do nome do arquivo
         }
 
         // Função para salvar ou atualizar os dados do formulário no localStorage
@@ -1005,16 +1007,16 @@
                     const index = candidates.findIndex(c => c.id === candidateId);
                     if (index !== -1) {
                         candidates[index] = { ...formData, id: candidateId }; // Garante que o ID é mantido
-                        showMessage('Candidato atualizado com sucesso!', 'success', formMessageBox);
+                        showSuccessMessageModal('Candidato atualizado com sucesso!'); // Usa o novo modal
                     } else {
-                        showMessage('Erro: Candidato não encontrado para atualização.', 'error', formMessageBox);
+                        showMessage('Erro: Candidato não encontrado para atualização.', 'error');
                     }
                 } else {
                     // Adicionar novo candidato
                     formData.id = Date.now().toString(); // Gerar um ID único
                     formData.status = 'Pendente'; // Define o status inicial como Pendente
                     candidates.push(formData);
-                    showMessage('Candidato salvo com sucesso!', 'success', formMessageBox);
+                    showSuccessMessageModal('Cadastro feito com sucesso!'); // Usa o novo modal
                 }
 
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(candidates));
@@ -1022,7 +1024,7 @@
                 showForm(); // Permanece na aba do formulário
             } catch (e) {
                 console.error("Erro ao salvar/atualizar candidato no localStorage: ", e);
-                showMessage(`Erro ao salvar/atualizar candidato: ${e.message}`, 'error', formMessageBox);
+                showMessage(`Erro ao salvar/atualizar candidato: ${e.message}`, 'error');
             } finally {
                 showLoading(false);
             }
@@ -1202,8 +1204,7 @@
             nomeCompleto: "Nome Completo",
             dataEntrevista: "Data da Entrevista",
             nomeAvaliador: "Nome do Avaliador",
-            status: "Status da Candidatura", // Adicionado
-            cvFileName: "Nome do Arquivo CV", // Adicionado
+            status: "Status da Candidatura",
             metaSuperada: "Pode descrever uma situação em que você superou significativamente suas metas de vendas?",
             resultadoAlcancado: "O que você fez para alcançar esse resultado?",
             maiorDesafio: "Qual foi o maior desafio de vendas que você enfrentou e como o superou?",
@@ -1341,13 +1342,12 @@
                             <p><strong>Data da Entrevista:</strong> <span>${candidate.dataEntrevista || 'N/A'}</span></p>
                             <p><strong>Nome do Avaliador:</strong> <span>${candidate.nomeAvaliador || 'N/A'}</span></p>
                             <p><strong>Status da Candidatura:</strong> <span>${candidate.status || 'Pendente'}</span></p>
-                            <p><strong>Nome do Arquivo CV:</strong> <span>${candidate.cvFileName || 'Nenhum CV anexado'}</span></p>
                     `;
 
                     // Adiciona todas as perguntas e respostas ao conteúdo HTML
                     for (const key in questionLabels) {
                         // Ignora os campos de informação já adicionados acima
-                        if (['nomeCompleto', 'dataEntrevista', 'nomeAvaliador', 'status', 'cvFileName'].includes(key)) {
+                        if (['nomeCompleto', 'dataEntrevista', 'nomeAvaliador', 'status'].includes(key)) {
                             continue;
                         }
                         const questionText = questionLabels[key];
@@ -1390,7 +1390,7 @@
             formSection.style.display = 'block';
             candidatesListSection.style.display = 'none';
             clearForm(); // Limpa o formulário ao alternar para ele
-            formMessageBox.style.display = 'none'; // Esconde a mensagem do formulário ao mudar de aba
+            // formMessageBox.style.display = 'none'; // Removido
         }
 
         // Função chamada pelo botão "Candidatos Cadastrados"
@@ -1407,6 +1407,21 @@
             candidatesListSection.style.display = 'block';
             loadCandidates(); // Carrega os candidatos ao alternar para a lista
         }
+
+        // Nova função para exibir o modal de mensagem de sucesso
+        function showSuccessMessageModal(message) {
+            successMessageText.textContent = message;
+            successMessageModal.style.display = 'flex';
+            setTimeout(() => {
+                closeSuccessMessageModal();
+            }, 3000); // Mensagem desaparece após 3 segundos
+        }
+
+        // Função para fechar o modal de mensagem de sucesso
+        function closeSuccessMessageModal() {
+            successMessageModal.style.display = 'none';
+        }
+
 
         // Expor funções para o escopo global para que possam ser chamadas pelos botões HTML
         window.saveFormData = saveFormData;
@@ -1425,6 +1440,7 @@
         window.confirmDeleteAll = confirmDeleteAll;
         window.closePasswordForDeleteAllModal = closePasswordForDeleteAllModal;
         window.checkPasswordForDeleteAll = checkPasswordForDeleteAll;
+        window.closeSuccessMessageModal = closeSuccessMessageModal; // Expor a nova função
     </script>
 </body>
 </html>
