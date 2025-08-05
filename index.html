@@ -257,6 +257,23 @@
             font-weight: bold;
             display: none; /* Escondido por padrão */
         }
+
+        /* Novo estilo para a mensagem de formulário */
+        #formMessageBox {
+            background-color: #d1fae5; /* Verde claro para sucesso */
+            color: #065f46; /* Verde escuro */
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px; /* Espaçamento acima */
+            margin-bottom: 15px; /* Espaçamento abaixo */
+            text-align: center;
+            font-weight: bold;
+            display: none; /* Escondido por padrão */
+            width: fit-content; /* Ajusta a largura ao conteúdo */
+            margin-left: auto; /* Centraliza */
+            margin-right: auto; /* Centraliza */
+        }
+
         .loading-indicator {
             text-align: center;
             padding: 20px;
@@ -369,7 +386,7 @@
                 color: #000; /* Títulos pretos */
                 font-weight: bold; /* Negrito na impressão */
             }
-            .button-group, .message-box, .loading-indicator, .modal-overlay {
+            .button-group, .message-box, .loading-indicator, .modal-overlay, #formMessageBox {
                 display: none; /* Esconde elementos não essenciais na impressão */
             }
             .answer {
@@ -774,9 +791,14 @@
                 </div>
             </div>
 
+            <div id="formMessageBox" class="message-box"></div> <!-- Nova caixa de mensagem para o formulário -->
+
             <div class="button-group">
+                <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display: none;">
+                <button class="btn btn-secondary" onclick="document.getElementById('cvFileInput').click()">Arquivar seu C.V</button>
                 <button class="btn" onclick="saveFormData()">Salvar Formulário</button>
             </div>
+            <p id="cvFileNameDisplay" class="text-center text-sm text-gray-600 mt-2"></p>
         </div>
 
         <div id="candidates-list-section">
@@ -863,7 +885,8 @@
         // Elementos DOM
         const formSection = document.getElementById('form-section');
         const candidatesListSection = document.getElementById('candidates-list-section');
-        const messageBox = document.getElementById('messageBox');
+        const messageBox = document.getElementById('messageBox'); // Mensagem geral (topo)
+        const formMessageBox = document.getElementById('formMessageBox'); // Nova mensagem para o formulário
         const loadingIndicator = document.getElementById('loadingIndicator');
         const candidatesTableBody = document.querySelector('#candidatesTable tbody');
         const currentCandidateIdInput = document.getElementById('currentCandidateId');
@@ -872,37 +895,39 @@
         const passwordInput = document.getElementById('passwordInput');
         const passwordError = document.getElementById('passwordError');
 
-        const confirmDeleteAllModal = document.getElementById('confirmDeleteAllModal'); // Novo modal de confirmação
-        const passwordForDeleteAllModal = document.getElementById('passwordForDeleteAllModal'); // Novo modal de senha para exclusão geral
+        const confirmDeleteAllModal = document.getElementById('confirmDeleteAllModal');
+        const passwordForDeleteAllModal = document.getElementById('passwordForDeleteAllModal');
         const passwordInputDeleteAll = document.getElementById('passwordInputDeleteAll');
         const passwordErrorDeleteAll = document.getElementById('passwordErrorDeleteAll');
-
 
         const candidateDetailsModal = document.getElementById('candidateDetailsModal');
         const candidateDetailsModalContent = document.getElementById('candidateDetailsModalContent');
         const candidateDetailsTitle = document.getElementById('candidateDetailsTitle');
         const candidateDetailsContent = document.getElementById('candidateDetailsContent');
 
+        const cvFileInput = document.getElementById('cvFileInput');
+        const cvFileNameDisplay = document.getElementById('cvFileNameDisplay');
+
         // Chave para armazenar os dados no localStorage
         const LOCAL_STORAGE_KEY = 'interviewCandidates';
-       
-        const SECRET_PASSWORD = "#Ark343390123"; 
+        // Senha secreta (PARA FINS DE DEMONSTRAÇÃO - NÃO USE EM PRODUÇÃO!)
+        const SECRET_PASSWORD = "suasenha"; // <-- Altere esta senha!
 
         // Variável para controlar se o usuário está "autenticado" na sessão
         let isAuthenticated = false;
 
-        // Função para exibir mensagens
-        function showMessage(message, type = 'success') {
-            messageBox.textContent = message;
-            messageBox.className = 'message-box'; // Reset classes
+        // Função para exibir mensagens (pode ser geral ou específica do formulário)
+        function showMessage(message, type = 'success', targetElement = messageBox) {
+            targetElement.textContent = message;
+            targetElement.className = 'message-box'; // Reset classes
             if (type === 'success') {
-                messageBox.classList.add('bg-green-100', 'text-green-800');
+                targetElement.classList.add('bg-green-100', 'text-green-800');
             } else if (type === 'error') {
-                messageBox.classList.add('bg-red-100', 'text-red-800');
+                targetElement.classList.add('bg-red-100', 'text-red-800');
             }
-            messageBox.style.display = 'block';
+            targetElement.style.display = 'block';
             setTimeout(() => {
-                messageBox.style.display = 'none';
+                targetElement.style.display = 'none';
             }, 5000);
         }
 
@@ -916,6 +941,15 @@
             showForm();
         });
 
+        // Event listener para o input de arquivo (para exibir o nome do arquivo)
+        cvFileInput.addEventListener('change', (event) => {
+            if (event.target.files.length > 0) {
+                cvFileNameDisplay.textContent = `CV selecionado: ${event.target.files[0].name}`;
+            } else {
+                cvFileNameDisplay.textContent = '';
+            }
+        });
+
         // Função para coletar todos os dados do formulário
         function getFormData() {
             const formData = {};
@@ -925,6 +959,8 @@
                     formData[element.name] = element.value;
                 }
             });
+            // Adiciona o nome do arquivo CV ao formData
+            formData.cvFileName = cvFileInput.files.length > 0 ? cvFileInput.files[0].name : '';
             return formData;
         }
 
@@ -936,9 +972,13 @@
                     element.value = data[key];
                 }
             }
+            // Exibe o nome do arquivo CV ao carregar para edição
+            cvFileNameDisplay.textContent = data.cvFileName ? `CV selecionado: ${data.cvFileName}` : '';
+            // Limpa o input de arquivo real (não é possível pré-preencher)
+            cvFileInput.value = '';
         }
 
-        // Função para limpar o formulário (agora apenas interna, sem botão)
+        // Função para limpar o formulário
         function clearForm() {
             const formElements = formSection.querySelectorAll('input, textarea');
             formElements.forEach(element => {
@@ -947,6 +987,8 @@
                 }
             });
             currentCandidateIdInput.value = ''; // Limpa o ID do candidato atual
+            cvFileInput.value = ''; // Limpa o input de arquivo
+            cvFileNameDisplay.textContent = ''; // Limpa o display do nome do arquivo
         }
 
         // Função para salvar ou atualizar os dados do formulário no localStorage
@@ -963,24 +1005,24 @@
                     const index = candidates.findIndex(c => c.id === candidateId);
                     if (index !== -1) {
                         candidates[index] = { ...formData, id: candidateId }; // Garante que o ID é mantido
-                        showMessage('Candidato atualizado com sucesso!', 'success');
+                        showMessage('Candidato atualizado com sucesso!', 'success', formMessageBox);
                     } else {
-                        showMessage('Erro: Candidato não encontrado para atualização.', 'error');
+                        showMessage('Erro: Candidato não encontrado para atualização.', 'error', formMessageBox);
                     }
                 } else {
                     // Adicionar novo candidato
                     formData.id = Date.now().toString(); // Gerar um ID único
                     formData.status = 'Pendente'; // Define o status inicial como Pendente
                     candidates.push(formData);
-                    showMessage('Candidato salvo com sucesso!', 'success');
+                    showMessage('Candidato salvo com sucesso!', 'success', formMessageBox);
                 }
 
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(candidates));
                 clearForm(); // Limpa o formulário após salvar
-                showForm(); // <--- Alterado para permanecer na aba do formulário
+                showForm(); // Permanece na aba do formulário
             } catch (e) {
                 console.error("Erro ao salvar/atualizar candidato no localStorage: ", e);
-                showMessage(`Erro ao salvar/atualizar candidato: ${e.message}`, 'error');
+                showMessage(`Erro ao salvar/atualizar candidato: ${e.message}`, 'error', formMessageBox);
             } finally {
                 showLoading(false);
             }
@@ -997,7 +1039,7 @@
                 if (candidates.length === 0) {
                     const row = candidatesTableBody.insertRow();
                     const cell = row.insertCell(0);
-                    cell.colSpan = 5; // Aumentado para 5 colunas (Nome, Data, Avaliador, Status, Ações)
+                    cell.colSpan = 5;
                     cell.textContent = 'Nenhum candidato cadastrado.';
                     cell.classList.add('text-center', 'py-4', 'text-gray-500');
                     showLoading(false);
@@ -1014,7 +1056,7 @@
                     statusCell.classList.add('status-cell', `status-${candidate.status ? candidate.status.toLowerCase() : 'pendente'}`);
                     statusCell.textContent = candidate.status || 'Pendente';
 
-                    const actionsCell = row.insertCell(4); // Alterado para a 5ª coluna
+                    const actionsCell = row.insertCell(4);
                     actionsCell.classList.add('action-buttons');
 
                     // Botão Ver Detalhes
@@ -1161,6 +1203,7 @@
             dataEntrevista: "Data da Entrevista",
             nomeAvaliador: "Nome do Avaliador",
             status: "Status da Candidatura", // Adicionado
+            cvFileName: "Nome do Arquivo CV", // Adicionado
             metaSuperada: "Pode descrever uma situação em que você superou significativamente suas metas de vendas?",
             resultadoAlcancado: "O que você fez para alcançar esse resultado?",
             maiorDesafio: "Qual foi o maior desafio de vendas que você enfrentou e como o superou?",
@@ -1298,12 +1341,13 @@
                             <p><strong>Data da Entrevista:</strong> <span>${candidate.dataEntrevista || 'N/A'}</span></p>
                             <p><strong>Nome do Avaliador:</strong> <span>${candidate.nomeAvaliador || 'N/A'}</span></p>
                             <p><strong>Status da Candidatura:</strong> <span>${candidate.status || 'Pendente'}</span></p>
+                            <p><strong>Nome do Arquivo CV:</strong> <span>${candidate.cvFileName || 'Nenhum CV anexado'}</span></p>
                     `;
 
                     // Adiciona todas as perguntas e respostas ao conteúdo HTML
                     for (const key in questionLabels) {
                         // Ignora os campos de informação já adicionados acima
-                        if (['nomeCompleto', 'dataEntrevista', 'nomeAvaliador', 'status'].includes(key)) {
+                        if (['nomeCompleto', 'dataEntrevista', 'nomeAvaliador', 'status', 'cvFileName'].includes(key)) {
                             continue;
                         }
                         const questionText = questionLabels[key];
@@ -1346,6 +1390,7 @@
             formSection.style.display = 'block';
             candidatesListSection.style.display = 'none';
             clearForm(); // Limpa o formulário ao alternar para ele
+            formMessageBox.style.display = 'none'; // Esconde a mensagem do formulário ao mudar de aba
         }
 
         // Função chamada pelo botão "Candidatos Cadastrados"
@@ -1373,13 +1418,13 @@
         window.showCandidateDetails = showCandidateDetails;
         window.closeCandidateDetailsModal = closeCandidateDetailsModal;
         window.toggleModalSize = toggleModalSize;
-        window.downloadCandidateDetails = downloadCandidateDetails; // Nova função exposta
-        window.updateCandidateStatus = updateCandidateStatus; // Nova função exposta
-        window.deleteAllCandidatesWithPasswordCheck = deleteAllCandidatesWithPasswordCheck; // Nova função exposta
-        window.closeConfirmDeleteAllModal = closeConfirmDeleteAllModal; // Nova função exposta
-        window.confirmDeleteAll = confirmDeleteAll; // Nova função exposta
-        window.closePasswordForDeleteAllModal = closePasswordForDeleteAllModal; // Nova função exposta
-        window.checkPasswordForDeleteAll = checkPasswordForDeleteAll; // Nova função exposta
+        window.downloadCandidateDetails = downloadCandidateDetails;
+        window.updateCandidateStatus = updateCandidateStatus;
+        window.deleteAllCandidatesWithPasswordCheck = deleteAllCandidatesWithPasswordCheck;
+        window.closeConfirmDeleteAllModal = closeConfirmDeleteAllModal;
+        window.confirmDeleteAll = confirmDeleteAll;
+        window.closePasswordForDeleteAllModal = closePasswordForDeleteAllModal;
+        window.checkPasswordForDeleteAll = checkPasswordForDeleteAll;
     </script>
 </body>
 </html>
