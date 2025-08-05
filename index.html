@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Entrevista</title>
+    <!-- Link para o Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para o formulário */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: #f8fafc; /* Um cinza muito claro, quase branco */
+            padding: 20px;
+            color: #334155; /* Cor de texto padrão mais suave */
+        }
+        .container {
+            max-width: 960px; /* Aumentado um pouco para mais espaço */
+            margin: auto;
+            background: #ffffff;
+            padding: 40px; /* Mais padding interno */
+            border-radius: 16px; /* Cantos ainda mais arredondados */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08); /* Sombra mais suave e espalhada */
+            border: 1px solid #e2e8f0; /* Borda sutil */
+        }
+        h1 {
+            /* Estilo para o título principal, agora similar ao section-title */
+            background-color: #4c51bf; /* Azul mais profundo e profissional */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px; /* Cantos arredondados */
+            margin-bottom: 30px;
+            font-size: 2.2rem; /* Tamanho ajustado para o título principal */
+            font-weight: bold; /* Negrito */
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(76, 81, 191, 0.3); /* Sombra para destaque */
+            letter-spacing: -0.025em; /* Pequeno ajuste de espaçamento entre letras */
+        }
+        h2 {
+            color: #2d3748; /* Cor de título de seção */
+            margin-bottom: 25px;
+            font-size: 1.8rem; /* Tamanho maior */
+            font-weight: bold; /* Negrito */
+        }
+        h3 {
+            color: #4a5568; /* Cor de subtítulo */
+            margin-top: 30px; /* Mais espaço acima do subtítulo */
+            margin-bottom: 15px;
+            font-size: 1.35rem; /* Tamanho ajustado */
+            font-weight: bold; /* Negrito */
+        }
+        .section {
+            margin-bottom: 40px; /* Mais espaço entre as seções */
+            border-bottom: 1px solid #edf2f7; /* Linha divisória mais clara */
+            padding-bottom: 30px;
+        }
+        .section:last-of-type {
+            border-bottom: none; /* Remove a borda da última seção */
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .section-title {
+            background-color: #4c51bf; /* Azul mais profundo e profissional */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px; /* Cantos arredondados */
+            margin-bottom: 30px;
+            font-size: 1.7rem; /* Tamanho maior para o título */
+            font-weight: bold; /* Negrito */
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(76, 81, 191, 0.3); /* Sombra para destaque */
+        }
+        .question {
+            margin-bottom: 25px; /* Mais espaço entre as perguntas */
+        }
+        .question label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold; /* Negrito para as perguntas */
+            color: #2d3748; /* Cor de texto para labels */
+            font-size: 1.05rem;
+        }
+        .answer {
+            width: 100%;
+            padding: 14px; /* Mais padding */
+            margin-top: 5px;
+            border: 1px solid #cbd5e0; /* Borda mais definida */
+            border-radius: 8px; /* Cantos arredondados */
+            box-sizing: border-box;
+            min-height: 150px; /* Aumentado para mais espaço na tela */
+            resize: vertical; /* Permite redimensionar verticalmente */
+            font-size: 1rem;
+            color: #4a5568;
+            background-color: #fefefe; /* Fundo levemente off-white */
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .answer:focus {
+            outline: none;
+            border-color: #667eea; /* Azul mais claro ao focar */
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2); /* Sombra ao focar */
+        }
+        .form-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px; /* Mais espaçamento */
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .form-info div {
+            flex: 1;
+            min-width: 300px; /* Largura mínima ajustada */
+        }
+        .form-info label {
+            font-size: 0.95rem; /* Tamanho menor para labels de info */
+            font-weight: bold; /* Negrito para os labels de informação */
+            color: #4a5568;
+        }
+        .form-info input[type="text"],
+        .form-info input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: #4a5568;
+            background-color: #fefefe;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .form-info input[type="text"]:focus,
+        .form-info input[type="date"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Espaçamento entre os botões */
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #edf2f7;
+        }
+        .btn {
+            padding: 15px 35px; /* Mais padding para o botão */
+            font-size: 1.2rem; /* Tamanho da fonte maior */
+            font-weight: bold;
+            border: none;
+            border-radius: 10px; /* Cantos mais arredondados */
+            cursor: pointer;
+            background-color: #4c51bf; /* Azul profissional */
+            color: white;
+            box-shadow: 0 8px 15px rgba(76, 81, 191, 0.3); /* Sombra mais pronunciada */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #5a67d8; /* Azul um pouco mais claro no hover */
+            transform: translateY(-3px); /* Efeito de "levantar" */
+            box-shadow: 0 12px 20px rgba(76, 81, 191, 0.4); /* Sombra maior no hover */
+        }
+        .btn:active {
+            transform: translateY(0); /* Volta à posição original ao clicar */
+            box-shadow: 0 4px 8px rgba(76, 81, 191, 0.2); /* Sombra menor ao clicar */
+        }
+        .btn-secondary {
+            background-color: #6c757d; /* Cinza para o botão secundário */
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Cinza mais escuro no hover */
+        }
+
+        /* Estilos para a lista de candidatos */
+        #candidates-list-section {
+            display: none; /* Escondido por padrão */
+            margin-top: 30px;
+        }
+        #candidates-list-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #candidates-list-section th,
+        #candidates-list-section td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+        #candidates-list-section th {
+            background-color: #edf2f7;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        #candidates-list-section tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+        #candidates-list-section .action-buttons button {
+            padding: 8px 12px;
+            margin-right: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+        #candidates-list-section .action-buttons .btn-view-details {
+            background-color: #38b2ac; /* Teal para ver detalhes */
+            color: white;
+        }
+        #candidates-list-section .action-buttons .btn-view-details:hover {
+            background-color: #319795;
+        }
+        #candidates-list-section .action-buttons .btn-download { /* Alterado de btn-print */
+            background-color: #28a745; /* Verde para download */
+            color: white;
+        }
+        #candidates-list-section .action-buttons .btn-download:hover { /* Alterado de btn-print */
+            background-color: #218838;
+        }
+        /* Novos estilos para botões de status */
+        #candidates-list-section .action-buttons .btn-approve {
+            background-color: #4CAF50; /* Verde para Aprovado */
+            color: white;
+        }
+        #candidates-list-section .action-buttons .btn-approve:hover {
+            background-color: #45a049;
+        }
+        #candidates-list-section .action-buttons .btn-reject {
+            background-color: #f44336; /* Vermelho para Reprovado */
+            color: white;
+        }
+        #candidates-list-section .action-buttons .btn-reject:hover {
+            background-color: #da190b;
+        }
+        .status-cell {
+            font-weight: bold;
+            text-align: center;
+        }
+        .status-aprovado {
+            color: #28a745; /* Verde */
+        }
+        .status-reprovado {
+            color: #dc3545; /* Vermelho */
+        }
+        .status-pendente {
+            color: #ffc107; /* Amarelo/Laranja */
+        }
+
+        .message-box {
+            background-color: #d1fae5; /* Verde claro para sucesso */
+            color: #065f46; /* Verde escuro */
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            display: none; /* Escondido por padrão */
+        }
+        .loading-indicator {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: #4c51bf;
+            display: none; /* Escondido por padrão */
+        }
+
+        /* Estilos para Modais (Senha e Detalhes) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none; /* Escondido por padrão */
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 500px; /* Tamanho padrão */
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transition: max-width 0.3s ease, max-height 0.3s ease; /* Transição suave */
+        }
+        .modal-content.modal-expanded {
+            max-width: 95vw; /* Expandido para quase a largura total da viewport */
+            max-height: 95vh; /* Expandido para quase a altura total da viewport */
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #2d3748;
+            font-size: 1.5rem;
+        }
+        .modal-content input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .modal-content .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .modal-content .modal-buttons .btn {
+            padding: 10px 25px;
+            font-size: 1rem;
+        }
+        .modal-content .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4a5568;
+        }
+        .modal-details-content {
+            text-align: left;
+            max-height: 70vh; /* Altura máxima para rolagem */
+            overflow-y: auto; /* Rolagem se o conteúdo for muito longo */
+            padding-right: 15px; /* Espaço para a barra de rolagem */
+        }
+        .modal-details-content p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .modal-details-content p strong {
+            color: #4c51bf; /* Cor da pergunta */
+            display: block; /* Cada pergunta em sua própria linha */
+            margin-bottom: 5px;
+        }
+        .modal-details-content p span {
+            display: block; /* Resposta em sua própria linha */
+            margin-left: 10px; /* Indentação para a resposta */
+            color: #4a5568;
+        }
+
+        /* Estilos para impressão */
+        @media print {
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+                color: #000; /* Texto preto para impressão */
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+                margin: 0;
+                max-width: none;
+                border: none;
+            }
+            h1, h2, h3 {
+                color: #000; /* Títulos pretos */
+                font-weight: bold; /* Negrito na impressão */
+            }
+            .button-group, .message-box, .loading-indicator, .modal-overlay {
+                display: none; /* Esconde elementos não essenciais na impressão */
+            }
+            .answer {
+                border: 1px dashed #a0aec0; /* Borda tracejada mais visível */
+                min-height: 120px; /* Aumentado para mais espaço na impressão */
+                padding: 8px;
+                background-color: #f7fafc;
+                color: #000;
+            }
+            input[type="text"], input[type="date"] {
+                border: none;
+                border-bottom: 1px dashed #a0aec0;
+                padding: 4px 0;
+                background-color: #f7fafc;
+                color: #000;
+            }
+            .section {
+                border-bottom: 1px solid #e2e8f0;
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+            .section-title {
+                background-color: #ebf8ff; /* Cor mais clara para impressão */
+                color: #000;
+                box-shadow: none;
+                border: 1px solid #bee3f8; /* Borda para o título da seção */
+                font-weight: bold; /* Negrito na impressão */
+            }
+            .form-info {
+                border-bottom: 1px solid #e2e8f0;
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            .form-info label {
+                font-weight: bold; /* Negrito para os labels de informação na impressão */
+            }
+            .question label {
+                font-weight: bold; /* Negrito para as perguntas na impressão */
+            }
+            #form-section {
+                display: block !important;
+            }
+            #candidates-list-section {
+                display: none !important;
+            }
+            /* Estilos específicos para impressão do modal de detalhes */
+            #print-area {
+                display: block !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: white;
+                z-index: 2000;
+                padding: 20px;
+                box-sizing: border-box;
+                overflow-y: auto;
+            }
+            #print-area h3 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            #print-area p {
+                margin-bottom: 10px;
+                line-height: 1.5;
+                font-size: 11pt;
+                word-wrap: break-word;
+            }
+            #print-area p strong {
+                color: #000;
+                display: block;
+                margin-bottom: 5px;
+            }
+            #print-area p span {
+                display: block;
+                margin-left: 10px;
+                color: #000;
+                white-space: pre-wrap; /* PRESERVA QUEBRAS DE LINHA E ESPAÇOS DO TEXTAREA */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center">Formulário de Entrevista</h1>
+
+        <div class="button-group">
+            <button class="btn" onclick="showForm()">Preencher Formulário</button>
+            <button class="btn btn-secondary" onclick="showCandidatesWithPasswordCheck()">Candidatos Cadastrados</button>
+        </div>
+
+        <div class="message-box" id="messageBox"></div>
+        <div class="loading-indicator" id="loadingIndicator">Carregando...</div>
+
+        <div id="form-section">
+            <input type="hidden" id="currentCandidateId">
+            <div class="form-info">
+                <div>
+                    <label for="nomeCompleto">Nome Completo:</label>
+                    <input type="text" id="nomeCompleto" name="nomeCompleto">
+                </div>
+                <div>
+                    <label for="dataEntrevista">Data da Entrevista:</label>
+                    <input type="date" id="dataEntrevista" name="dataEntrevista">
+                </div>
+                <div>
+                    <label for="nomeAvaliador">Nome do Avaliador:</label>
+                    <input type="text" id="nomeAvaliador" name="nomeAvaliador" value="Dark Morellato" readonly>
+                </div>
+            </div>
+
+            <!-- Seção 1: Experiência e Habilidades de Vendas -->
+            <div class="section">
+                <h2 class="section-title">Seção 1: Experiência e Habilidades de Vendas</h2>
+                <div class="question">
+                    <label for="metaSuperada">Pode descrever uma situação em que você superou significativamente suas metas de vendas?</label>
+                    <textarea id="metaSuperada" name="metaSuperada" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="resultadoAlcancado">O que você fez para alcançar esse resultado?</label>
+                    <textarea id="resultadoAlcancado" name="resultadoAlcancado" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="maiorDesafio">Qual foi o maior desafio de vendas que você enfrentou e como o superou?</label>
+                    <textarea id="maiorDesafio" name="maiorDesafio" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="motivacaoResiliencia">Como você se mantém motivado e resiliente diante de recusas ou períodos de baixa performance?</label>
+                    <textarea id="motivacaoResiliencia" name="motivacaoResiliencia" class="answer"></textarea>
+                </div>
+
+                <!-- Conhecimento do Produto/Serviço -->
+                <div class="question">
+                    <label for="aprendizadoProduto">Como você abordaria o aprendizado sobre um produto ou serviço completamente novo? Descreva uma situação em que você teve que explicar um conceito complexo do produto a um cliente. Como você garantiu que ele entendeu?</label>
+                    <textarea id="aprendizadoProduto" name="aprendizadoProduto" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="atualizacaoSetor">Como você se mantém atualizado sobre as novidades e tendências do setor em que irá atuar?</label>
+                    <textarea id="atualizacaoSetor" name="atualizacaoSetor" class="answer"></textarea>
+                </div>
+
+                <!-- Habilidade de Negociação -->
+                <div class="question">
+                    <label for="negocioPerdido">Compartilhe uma experiência em que você conseguiu fechar um negócio que parecia perdido. Quais foram as estratégias que você utilizou?</label>
+                    <textarea id="negocioPerdido" name="negocioPerdido" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="lidarObjecoes">Como você lida com objeções de preço ou concorrência? Pode dar um exemplo?</label>
+                    <textarea id="lidarObjecoes" name="lidarObjecoes" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="necessidadesCliente">Qual é a sua abordagem para identificar as necessidades e prioridades de um cliente durante uma negociação?</label>
+                    <textarea id="necessidadesCliente" name="necessidadesCliente" class="answer"></textarea>
+                </div>
+
+                <!-- Comunicação e Persuasão -->
+                <div class="question">
+                    <label for="persuadirCliente">Descreva uma situação em que você precisou persuadir um cliente indeciso. Qual foi sua abordagem?</label>
+                    <textarea id="persuadirCliente" name="persuadirCliente" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="adaptarComunicacao">Como você adapta sua comunicação para diferentes tipos de clientes ou públicos?</label>
+                    <textarea id="adaptarComunicacao" name="adaptarComunicacao" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="ouvirCliente">Como você garante que está realmente ouvindo o cliente e não apenas esperando a sua vez de falar?</label>
+                    <textarea id="ouvirCliente" name="ouvirCliente" class="answer"></textarea>
+                </div>
+
+                <!-- Prospecção e Geração de Leads -->
+                <div class="question">
+                    <label for="estrategiasProspeccao">Quais são as suas estratégias favoritas e mais eficazes para prospecção de novos clientes e geração de leads?</label>
+                    <textarea id="estrategiasProspeccao" name="estrategiasProspeccao" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="criatividadeNegocio">Pode dar um exemplo de uma vez em que você teve que ser criativo para encontrar novas oportunidades de negócio?</label>
+                    <textarea id="criatividadeNegocio" name="criatividadeNegocio" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="gerenciarLeads">Como você prioriza e gerencia seus leads para maximizar suas chances de conversão?</label>
+                    <textarea id="gerenciarLeads" name="gerenciarLeads" class="answer"></textarea>
+                </div>
+
+                <!-- Atendimento ao Cliente -->
+                <div class="question">
+                    <label for="clienteInsatisfeito">Conte-me sobre uma vez em que você teve que lidar com um cliente insatisfeito. Como você resolveu a situação e garantiu a satisfação dele?</label>
+                    <textarea id="clienteInsatisfeito" name="clienteInsatisfeito" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="posVenda">Qual é a sua visão sobre o papel do pós-venda na retenção de clientes?</label>
+                    <textarea id="posVenda" name="posVenda" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="relacionamentosDuradouros">Como você constrói relacionamentos duradouros com seus clientes?</label>
+                    <textarea id="relacionamentosDuradouros" name="relacionamentosDuradouros" class="answer"></textarea>
+                </div>
+
+                <!-- Orientação para Metas -->
+                <div class="question">
+                    <label for="estabelecerMetas">Como você estabelece e acompanha suas metas de vendas?</label>
+                    <textarea id="estabelecerMetas" name="estabelecerMetas" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="riscoNaoAtingirMetas">O que você faz quando percebe que está em risco de não atingir suas metas?</label>
+                    <textarea id="riscoNaoAtingirMetas" name="riscoNaoAtingirMetas" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="metaDesafiadora">Pode compartilhar um exemplo de uma vez em que você teve que se esforçar muito para atingir uma meta desafiadora?</label>
+                    <textarea id="metaDesafiadora" name="metaDesafiadora" class="answer"></textarea>
+                </div>
+            </div>
+
+            <!-- Seção 2 -->
+            <div class="section">
+                <h2 class="section-title">Seção 2: Valor da Competição.</h2>
+                <!-- Valor da Competição -->
+                <div class="question">
+                    <label for="papelCompeticao">Como você enxerga o papel da competição no mercado em que atua?</label>
+                    <textarea id="papelCompeticao" name="papelCompeticao" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="competicaoInovacao">Você pode dar um exemplo de como a competição impulsionou a inovação ou a melhoria em um produto ou serviço?</label>
+                    <textarea id="competicaoInovacao" name="competicaoInovacao" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="beneficiosCompeticao">Em sua opinião, quais são os benefícios da competição para os consumidores e para as empresas?</label>
+                    <textarea id="beneficiosCompeticao" name="beneficiosCompeticao" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="ambienteCompetitivo">Você já trabalhou em um ambiente altamente competitivo? Como você lidou com essa dinâmica e quais foram os resultados?</label>
+                    <textarea id="ambienteCompetitivo" name="ambienteCompetitivo" class="answer"></textarea>
+                </div>
+
+                <!-- Incentivo ao Lucro -->
+                <div class="question">
+                    <label for="visaoLucro">Qual é a sua visão sobre o lucro nas empresas? Como você o relaciona com a criação de valor para os clientes e para a sociedade?</label>
+                    <textarea id="visaoLucro" name="visaoLucro" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="lucroBeneficios">Você consegue citar um exemplo de como uma empresa, ao buscar o lucro, também gerou benefícios para outras partes interessadas (clientes, funcionários, comunidade)?</label>
+                    <textarea id="lucroBeneficios" name="lucroBeneficios" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="focoLucroInfluencia">Em sua experiência profissional, como o foco no lucro pode influenciar as decisões estratégicas da empresa em que você trabalha?</label>
+                    <textarea id="focoLucroInfluencia" name="focoLucroInfluencia" class="answer"></textarea>
+                </div>
+
+                <!-- Responsabilidade Individual -->
+                <div class="question">
+                    <label for="responsabilidadeProjeto">Descreva uma situação em que você assumiu total responsabilidade por um projeto ou resultado, mesmo diante de obstáculos. Qual foi o desfecho?</label>
+                    <textarea id="responsabilidadeProjeto" name="responsabilidadeProjeto" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="desenvolvimentoProfissional">Como você se mantém motivado e busca seu próprio desenvolvimento profissional, independentemente das oportunidades oferecidas pela empresa?</label>
+                    <textarea id="desenvolvimentoProfissional" name="desenvolvimentoProfissional" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="identificouFalha">Conte-me sobre uma vez em que você identificou uma falha ou um problema e tomou a iniciativa para resolvê-lo, sem que lhe fosse pedido.</label>
+                    <textarea id="identificouFalha" name="identificouFalha" class="answer"></textarea>
+                </div>
+
+                <!-- Eficiência e Produtividade -->
+                <div class="question">
+                    <label for="otimizarTempo">Como você busca otimizar seu tempo e recursos para alcançar seus objetivos no trabalho? Pode dar um exemplo prático?</label>
+                    <textarea id="otimizarTempo" name="otimizarTempo" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="importanciaEficiencia">Em sua visão, qual é a importância da eficiência e produtividade para o sucesso de uma empresa e para a economia como um todo?</label>
+                    <textarea id="importanciaEficiencia" name="importanciaEficiencia" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="melhoriaEficiencia">Você já implementou alguma medida ou processo que resultou em melhoria significativa de eficiência ou produtividade? Conte-me sobre isso.</label>
+                    <textarea id="melhoriaEficiencia" name="melhoriaEficiencia" class="answer"></textarea>
+                </div>
+
+                <!-- Liberdade Econômica -->
+                <div class="question">
+                    <label for="papelGoverno">Qual é a sua opinião sobre o papel do governo na economia? Você acredita que menos intervenção estatal pode beneficiar o crescimento econômico? Por quê?</label>
+                    <textarea id="papelGoverno" name="papelGoverno" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="burocraciaImpacto">Em sua visão, como a burocracia ou regulamentações excessivas podem impactar o ambiente de negócios e a inovação?</label>
+                    <textarea id="burocraciaImpacto" name="burocraciaImpacto" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="liberdadeEconomicaContribuicao">Você pode dar um exemplo de como a liberdade econômica contribui para a prosperidade de um setor ou de um país?</label>
+                    <textarea id="liberdadeEconomicaContribuicao" name="liberdadeEconomicaContribuicao" class="answer"></textarea>
+                </div>
+            </div>
+
+            <!-- Seção 3: Perguntas Comportamentais e Situacionais -->
+            <div class="section">
+                <h2 class="section-title">Seção 3: Perguntas Comportamentais e Situacionais</h2>
+                <div class="question">
+                    <label for="oportunidadeMercado">Descreva uma situação em que você identificou uma oportunidade de mercado não explorada. Como você agiu para capitalizá-la?</label>
+                    <textarea id="oportunidadeMercado" name="oportunidadeMercado" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="pressaoResultados">Como você lida com a pressão por resultados em um ambiente competitivo? Qual a importância da meritocracia para você?</label>
+                    <textarea id="pressaoResultados" name="pressaoResultados" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="papelEmpreendedorismo">Qual é a sua visão sobre o papel do empreendedorismo na economia? Você se considera um "empreendedor de si mesmo"?</label>
+                    <textarea id="papelEmpreendedorismo" name="papelEmpreendedorismo" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="inovarVenda">Fale sobre uma ocasião em que você precisou inovar ou encontrar uma solução criativa para fechar uma venda?</label>
+                    <textarea id="inovarVenda" name="inovarVenda" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="sucessoIndividualEmpresa">Como você enxerga a relação entre o sucesso individual em vendas e o sucesso da empresa em um mercado livre?</label>
+                    <textarea id="sucessoIndividualEmpresa" name="sucessoIndividualEmpresa" class="answer"></textarea>
+                </div>
+            </div>
+
+            <!-- Seção 4 -->
+            <div class="section">
+                <h2 class="section-title">Seção 4: Iniciativa e Proatividade</h2>
+                <!-- Iniciativa e Proatividade -->
+                <div class="question">
+                    <label for="organizarTarefas">Como você se organiza para garantir que as tarefas sejam cumpridas sem a necessidade de supervisão constante?</label>
+                    <textarea id="organizarTarefas" name="organizarTarefas" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="proatividadeVendas">Em sua experiência, qual é o papel da proatividade no sucesso em vendas? Pode dar um exemplo de como você aplicou isso?</label>
+                    <textarea id="proatividadeVendas" name="proatividadeVendas" class="answer"></textarea>
+                </div>
+
+                <!-- Adaptabilidade e Resiliência -->
+                <div class="question">
+                    <label for="mudarAmbiente">Conte-me sobre uma grande mudança que você teve que enfrentar em um ambiente de trabalho (por exemplo, mudança de produto, processo, equipe). Como você se adaptou a ela?</label>
+                    <textarea id="mudarAmbiente" name="mudarAmbiente" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="desafioReves">Descreva uma situação em que você enfrentou um desafio ou um revés significativo. Como você se recuperou e o que aprendeu com a experiência?</label>
+                    <textarea id="desafioReves" name="desafioReves" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="lidarPressaoIncertezas">Como você lida com a pressão e com as incertezas que são comuns na área de vendas?</label>
+                    <textarea id="lidarPressaoIncertezas" name="lidarPressaoIncertezas" class="answer"></textarea>
+                </div>
+
+                <!-- Ética e Integridade -->
+                <div class="question">
+                    <label for="eticaIntegridade">Em sua opinião, o que significa ter ética e integridade no ambiente de vendas? Pode dar um exemplo de como você aplicaria esses princípios em uma situação desafiadora?</label>
+                    <textarea id="eticaIntegridade" name="eticaIntegridade" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="decisaoEtica">Conte-me sobre uma situação em que você precisou tomar uma decisão difícil que envolvia questões éticas. Como você agiu?</label>
+                    <textarea id="decisaoEtica" name="decisaoEtica" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="transparenciaHonestidade">Como você garante a transparência e a honestidade no relacionamento com seus clientes e colegas?</label>
+                    <textarea id="transparenciaHonestidade" name="transparenciaHonestidade" class="answer"></textarea>
+                </div>
+
+                <!-- Atitude Positiva e Energia -->
+                <div class="question">
+                    <label for="motivaVendas">O que mais te motiva na área de vendas?</label>
+                    <textarea id="motivaVendas" name="motivaVendas" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="atitudePositiva">Como você mantém uma atitude positiva e o entusiasmo, mesmo em dias desafiadores ou quando as metas não são atingidas?</label>
+                    <textarea id="atitudePositiva" name="atitudePositiva" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="entusiasmoImpacto">Descreva uma situação em que seu entusiasmo ou sua energia impactaram positivamente uma negociação ou o relacionamento com um cliente.</label>
+                    <textarea id="entusiasmoImpacto" name="entusiasmoImpacto" class="answer"></textarea>
+                </div>
+
+                <!-- Capacidade de Autoaprendizado -->
+                <div class="question">
+                    <label for="aprimoramentoProfissional">Como você busca se aprimorar e se desenvolver profissionalmente? Quais são as últimas coisas que você aprendeu por conta própria?</label>
+                    <textarea id="aprimoramentoProfissional" name="aprimoramentoProfissional" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="habilidadeDesenvolver">Existe alguma habilidade que você percebeu que precisava desenvolver para ser mais eficaz? Como você a auto aprendeu?</label>
+                    <textarea id="habilidadeDesenvolver" name="habilidadeDesenvolver" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="importanciaConhecimento">Qual é a importância da busca contínua por conhecimento na área de vendas, em sua opinião?</label>
+                    <textarea id="importanciaConhecimento" name="importanciaConhecimento" class="answer"></textarea>
+                </div>
+            </div>
+
+            <!-- Sobre a sua escolha de se tornar parte da empresa Mi Place -->
+            <div class="section">
+                <h2 class="section-title">Sobre a sua escolha de se tornar parte da empresa Mi Place</h2>
+                <div class="question">
+                    <label for="conheceEmpresa">Você conhece nossa empresa, teve alguma experiência na área de celulares? Você reside em Amparo?</label>
+                    <textarea id="conheceEmpresa" name="conheceEmpresa" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="disponibilidadeHorario">Você possui disponibilidade para trabalhar no horário comercial do varejo de Amparo? Quanto ao horário, você costuma ser pontual?</label>
+                    <textarea id="disponibilidadeHorario" name="disponibilidadeHorario" class="answer"></textarea>
+                </div>
+                <div class="question">
+                    <label for="candidatoIdeal">Explique por que você acredita ser o candidato ideal para a vaga e como pode contribuir para o sucesso da empresa.</label>
+                    <textarea id="candidatoIdeal" name="candidatoIdeal" class="answer"></textarea>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="saveFormData()">Salvar Formulário</button>
+            </div>
+        </div>
+
+        <div id="candidates-list-section">
+            <h2 class="section-title">Candidatos Cadastrados</h2>
+            <table id="candidatesTable">
+                <thead>
+                    <tr>
+                        <th>Nome Completo</th>
+                        <th>Data da Entrevista</th>
+                        <th>Avaliador</th>
+                        <th>Status</th> <!-- Nova coluna para o status -->
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dados dos candidatos serão inseridos aqui -->
+                </tbody>
+            </table>
+            <div class="button-group">
+                <button class="btn" onclick="showForm()">Novo Formulário</button>
+                <button class="btn btn-reject" onclick="deleteAllCandidatesWithPasswordCheck()">Excluir Todos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Senha -->
+    <div id="passwordModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closePasswordModal()">&times;</button>
+            <h3>Acesso Restrito</h3>
+            <p>Por favor, insira a senha para acessar os candidatos cadastrados.</p>
+            <input type="password" id="passwordInput" placeholder="Digite a senha">
+            <div class="modal-buttons">
+                <button class="btn" onclick="checkPassword()">Acessar</button>
+            </div>
+            <p id="passwordError" class="text-red-500 mt-2" style="display: none;"></p>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão Geral -->
+    <div id="confirmDeleteAllModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeConfirmDeleteAllModal()">&times;</button>
+            <h3>Confirmar Exclusão de Todos</h3>
+            <p>Tem certeza que deseja **excluir TODOS os candidatos** cadastrados? Esta ação é irreversível.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-reject" onclick="confirmDeleteAll()">Sim, Excluir Todos</button>
+                <button class="btn btn-secondary" onclick="closeConfirmDeleteAllModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Senha para Exclusão Geral -->
+    <div id="passwordForDeleteAllModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" onclick="closePasswordForDeleteAllModal()">&times;</button>
+            <h3>Confirmar Senha</h3>
+            <p>Por favor, insira a senha para confirmar a exclusão de todos os candidatos.</p>
+            <input type="password" id="passwordInputDeleteAll" placeholder="Digite a senha">
+            <div class="modal-buttons">
+                <button class="btn" onclick="checkPasswordForDeleteAll()">Confirmar</button>
+            </div>
+            <p id="passwordErrorDeleteAll" class="text-red-500 mt-2" style="display: none;"></p>
+        </div>
+    </div>
+
+
+    <!-- Modal de Detalhes do Candidato -->
+    <div id="candidateDetailsModal" class="modal-overlay">
+        <div class="modal-content" id="candidateDetailsModalContent">
+            <button class="close-button" onclick="closeCandidateDetailsModal()">&times;</button>
+            <h3 id="candidateDetailsTitle">Detalhes do Candidato</h3>
+            <div id="candidateDetailsContent" class="modal-details-content">
+                <!-- Detalhes do candidato serão carregados aqui -->
+            </div>
+            <div class="modal-buttons mt-4">
+                <button class="btn btn-secondary" onclick="toggleModalSize()">Expandir Visualização</button>
+                <button class="btn btn-secondary" onclick="closeCandidateDetailsModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const formSection = document.getElementById('form-section');
+        const candidatesListSection = document.getElementById('candidates-list-section');
+        const messageBox = document.getElementById('messageBox');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const candidatesTableBody = document.querySelector('#candidatesTable tbody');
+        const currentCandidateIdInput = document.getElementById('currentCandidateId');
+
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordError = document.getElementById('passwordError');
+
+        const confirmDeleteAllModal = document.getElementById('confirmDeleteAllModal'); // Novo modal de confirmação
+        const passwordForDeleteAllModal = document.getElementById('passwordForDeleteAllModal'); // Novo modal de senha para exclusão geral
+        const passwordInputDeleteAll = document.getElementById('passwordInputDeleteAll');
+        const passwordErrorDeleteAll = document.getElementById('passwordErrorDeleteAll');
+
+
+        const candidateDetailsModal = document.getElementById('candidateDetailsModal');
+        const candidateDetailsModalContent = document.getElementById('candidateDetailsModalContent');
+        const candidateDetailsTitle = document.getElementById('candidateDetailsTitle');
+        const candidateDetailsContent = document.getElementById('candidateDetailsContent');
+
+        // Chave para armazenar os dados no localStorage
+        const LOCAL_STORAGE_KEY = 'interviewCandidates';
+        // Senha secreta (PARA FINS DE DEMONSTRAÇÃO - NÃO USE EM PRODUÇÃO!)
+        const SECRET_PASSWORD = "#Ark343390123"; //
+
+        // Variável para controlar se o usuário está "autenticado" na sessão
+        let isAuthenticated = false;
+
+        // Função para exibir mensagens
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = 'message-box'; // Reset classes
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            }
+            messageBox.style.display = 'block';
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // Função para mostrar/esconder o indicador de carregamento
+        function showLoading(show) {
+            loadingIndicator.style.display = show ? 'block' : 'none';
+        }
+
+        // Inicialização: exibir o formulário por padrão ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            showForm();
+        });
+
+        // Função para coletar todos os dados do formulário
+        function getFormData() {
+            const formData = {};
+            const formElements = formSection.querySelectorAll('input, textarea');
+            formElements.forEach(element => {
+                if (element.id && element.name) {
+                    formData[element.name] = element.value;
+                }
+            });
+            return formData;
+        }
+
+        // Função para preencher o formulário com dados
+        function populateForm(data) {
+            for (const key in data) {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = data[key];
+                }
+            }
+        }
+
+        // Função para limpar o formulário (agora apenas interna, sem botão)
+        function clearForm() {
+            const formElements = formSection.querySelectorAll('input, textarea');
+            formElements.forEach(element => {
+                if (element.type !== 'hidden' && element.id !== 'nomeAvaliador') {
+                    element.value = '';
+                }
+            });
+            currentCandidateIdInput.value = ''; // Limpa o ID do candidato atual
+        }
+
+        // Função para salvar ou atualizar os dados do formulário no localStorage
+        function saveFormData() {
+            showLoading(true);
+            const formData = getFormData();
+            const candidateId = currentCandidateIdInput.value;
+
+            try {
+                let candidates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+
+                if (candidateId) {
+                    // Atualizar candidato existente
+                    const index = candidates.findIndex(c => c.id === candidateId);
+                    if (index !== -1) {
+                        candidates[index] = { ...formData, id: candidateId }; // Garante que o ID é mantido
+                        showMessage('Candidato atualizado com sucesso!', 'success');
+                    } else {
+                        showMessage('Erro: Candidato não encontrado para atualização.', 'error');
+                    }
+                } else {
+                    // Adicionar novo candidato
+                    formData.id = Date.now().toString(); // Gerar um ID único
+                    formData.status = 'Pendente'; // Define o status inicial como Pendente
+                    candidates.push(formData);
+                    showMessage('Candidato salvo com sucesso!', 'success');
+                }
+
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(candidates));
+                clearForm(); // Limpa o formulário após salvar
+                showCandidates(); // Volta para a lista de candidatos
+            } catch (e) {
+                console.error("Erro ao salvar/atualizar candidato no localStorage: ", e);
+                showMessage(`Erro ao salvar/atualizar candidato: ${e.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Função para carregar e exibir os candidatos do localStorage
+        function loadCandidates() {
+            showLoading(true);
+            candidatesTableBody.innerHTML = ''; // Limpa a tabela antes de carregar novos dados
+
+            try {
+                const candidates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+
+                if (candidates.length === 0) {
+                    const row = candidatesTableBody.insertRow();
+                    const cell = row.insertCell(0);
+                    cell.colSpan = 5; // Aumentado para 5 colunas (Nome, Data, Avaliador, Status, Ações)
+                    cell.textContent = 'Nenhum candidato cadastrado.';
+                    cell.classList.add('text-center', 'py-4', 'text-gray-500');
+                    showLoading(false);
+                    return;
+                }
+
+                candidates.forEach((candidate) => {
+                    const row = candidatesTableBody.insertRow();
+                    row.insertCell(0).textContent = candidate.nomeCompleto || 'N/A';
+                    row.insertCell(1).textContent = candidate.dataEntrevista || 'N/A';
+                    row.insertCell(2).textContent = candidate.nomeAvaliador || 'N/A';
+
+                    const statusCell = row.insertCell(3);
+                    statusCell.classList.add('status-cell', `status-${candidate.status ? candidate.status.toLowerCase() : 'pendente'}`);
+                    statusCell.textContent = candidate.status || 'Pendente';
+
+                    const actionsCell = row.insertCell(4); // Alterado para a 5ª coluna
+                    actionsCell.classList.add('action-buttons');
+
+                    // Botão Ver Detalhes
+                    const viewDetailsButton = document.createElement('button');
+                    viewDetailsButton.textContent = 'Ver Detalhes';
+                    viewDetailsButton.classList.add('btn-view-details');
+                    viewDetailsButton.onclick = () => showCandidateDetails(candidate.id);
+                    actionsCell.appendChild(viewDetailsButton);
+
+                    // Botão Download
+                    const downloadButton = document.createElement('button');
+                    downloadButton.textContent = 'Download';
+                    downloadButton.classList.add('btn-download');
+                    downloadButton.onclick = () => downloadCandidateDetails(candidate.id);
+                    actionsCell.appendChild(downloadButton);
+
+                    // Botões de Status (Aprovar/Reprovar)
+                    const approveButton = document.createElement('button');
+                    approveButton.textContent = 'Aprovar';
+                    approveButton.classList.add('btn-approve');
+                    approveButton.onclick = () => updateCandidateStatus(candidate.id, 'Aprovado');
+                    actionsCell.appendChild(approveButton);
+
+                    const rejectButton = document.createElement('button');
+                    rejectButton.textContent = 'Reprovar';
+                    rejectButton.classList.add('btn-reject');
+                    rejectButton.onclick = () => updateCandidateStatus(candidate.id, 'Reprovado');
+                    actionsCell.appendChild(rejectButton);
+                });
+            } catch (e) {
+                console.error("Erro ao carregar candidatos do localStorage: ", e);
+                showMessage(`Erro ao carregar candidatos: ${e.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Função para atualizar o status de um candidato
+        function updateCandidateStatus(id, status) {
+            showLoading(true);
+            try {
+                let candidates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+                const index = candidates.findIndex(c => c.id === id);
+
+                if (index !== -1) {
+                    candidates[index].status = status;
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(candidates));
+                    showMessage(`Status do candidato ${candidates[index].nomeCompleto} atualizado para "${status}"!`, 'success');
+                    loadCandidates(); // Recarrega a lista para refletir a mudança
+                } else {
+                    showMessage('Candidato não encontrado para atualização de status.', 'error');
+                }
+            } catch (e) {
+                console.error("Erro ao atualizar status do candidato: ", e);
+                showMessage(`Erro ao atualizar status: ${e.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // --- Funções de Senha ---
+        function showPasswordPrompt() {
+            passwordInput.value = ''; // Limpa o campo de senha
+            passwordError.style.display = 'none';
+            passwordModal.style.display = 'flex';
+            passwordInput.focus(); // Foca no campo de senha
+        }
+
+        function closePasswordModal() {
+            passwordModal.style.display = 'none';
+            passwordInput.value = '';
+            passwordError.style.display = 'none';
+        }
+
+        function checkPassword() {
+            const enteredPassword = passwordInput.value;
+            if (enteredPassword === SECRET_PASSWORD) {
+                isAuthenticated = true; // Autentica a sessão
+                closePasswordModal();
+                showCandidates(); // Exibe a lista de candidatos
+                showMessage('Acesso concedido!', 'success');
+            } else {
+                passwordError.textContent = 'Senha incorreta. Tente novamente.';
+                passwordError.style.display = 'block';
+                passwordInput.value = ''; // Limpa a senha incorreta
+                passwordInput.focus();
+            }
+        }
+
+        // --- Funções de Exclusão Geral ---
+        function deleteAllCandidatesWithPasswordCheck() {
+            confirmDeleteAllModal.style.display = 'flex'; // Mostra o modal de confirmação
+        }
+
+        function closeConfirmDeleteAllModal() {
+            confirmDeleteAllModal.style.display = 'none';
+        }
+
+        function confirmDeleteAll() {
+            closeConfirmDeleteAllModal(); // Fecha o modal de confirmação
+            passwordInputDeleteAll.value = ''; // Limpa o campo de senha
+            passwordErrorDeleteAll.style.display = 'none';
+            passwordForDeleteAllModal.style.display = 'flex'; // Mostra o modal de senha
+            passwordInputDeleteAll.focus();
+        }
+
+        function closePasswordForDeleteAllModal() {
+            passwordForDeleteAllModal.style.display = 'none';
+            passwordInputDeleteAll.value = '';
+            passwordErrorDeleteAll.style.display = 'none';
+        }
+
+        function checkPasswordForDeleteAll() {
+            const enteredPassword = passwordInputDeleteAll.value;
+            if (enteredPassword === SECRET_PASSWORD) {
+                closePasswordForDeleteAllModal();
+                deleteAllCandidates(); // Procede com a exclusão
+            } else {
+                passwordErrorDeleteAll.textContent = 'Senha incorreta. Tente novamente.';
+                passwordErrorDeleteAll.style.display = 'block';
+                passwordInputDeleteAll.value = '';
+                passwordInputDeleteAll.focus();
+            }
+        }
+
+        function deleteAllCandidates() {
+            showLoading(true);
+            try {
+                localStorage.removeItem(LOCAL_STORAGE_KEY); // Remove todos os dados
+                showMessage('Todos os candidatos foram excluídos com sucesso!', 'success');
+                loadCandidates(); // Recarrega a lista (agora vazia)
+            } catch (e) {
+                console.error("Erro ao excluir todos os candidatos do localStorage: ", e);
+                showMessage(`Erro ao excluir todos os candidatos: ${e.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+
+        // --- Mapeamento de Perguntas para Detalhes e Download ---
+        const questionLabels = {
+            nomeCompleto: "Nome Completo",
+            dataEntrevista: "Data da Entrevista",
+            nomeAvaliador: "Nome do Avaliador",
+            status: "Status da Candidatura", // Adicionado
+            metaSuperada: "Pode descrever uma situação em que você superou significativamente suas metas de vendas?",
+            resultadoAlcancado: "O que você fez para alcançar esse resultado?",
+            maiorDesafio: "Qual foi o maior desafio de vendas que você enfrentou e como o superou?",
+            motivacaoResiliencia: "Como você se mantém motivado e resiliente diante de recusas ou períodos de baixa performance?",
+            aprendizadoProduto: "Como você abordaria o aprendizado sobre um produto ou serviço completamente novo? Descreva uma situação em que você teve que explicar um conceito complexo do produto a um cliente. Como você garantiu que ele entendeu?",
+            atualizacaoSetor: "Como você se mantém atualizado sobre as novidades e tendências do setor em que irá atuar?",
+            negocioPerdido: "Compartilhe uma experiência em que você conseguiu fechar um negócio que parecia perdido. Quais foram as estratégias que você utilizou?",
+            lidarObjecoes: "Como você lida com objeções de preço ou concorrência? Pode dar um exemplo?",
+            necessidadesCliente: "Qual é a sua abordagem para identificar as necessidades e prioridades de um cliente durante uma negociação?",
+            persuadirCliente: "Descreva uma situação em que você precisou persuadir um cliente indeciso. Qual foi sua abordagem?",
+            adaptarComunicacao: "Como você adapta sua comunicação para diferentes tipos de clientes ou públicos?",
+            ouvirCliente: "Como você garante que está realmente ouvindo o cliente e não apenas esperando a sua vez de falar?",
+            estrategiasProspeccao: "Quais são as suas estratégias favoritas e mais eficazes para prospecção de novos clientes e geração de leads?",
+            criatividadeNegocio: "Pode dar um exemplo de uma vez em que você teve que ser criativo para encontrar novas oportunidades de negócio?",
+            gerenciarLeads: "Como você prioriza e gerencia seus leads para maximizar suas chances de conversão?",
+            clienteInsatisfeito: "Conte-me sobre uma vez em que você teve que lidar com um cliente insatisfeito. Como você resolveu a situação e garantiu a satisfação dele?",
+            posVenda: "Qual é a sua visão sobre o papel do pós-venda na retenção de clientes?",
+            relacionamentosDuradouros: "Como você constrói relacionamentos duradouros com seus clientes?",
+            estabelecerMetas: "Como você estabelece e acompanha suas metas de vendas?",
+            riscoNaoAtingirMetas: "O que você faz quando percebe que está em risco de não atingir suas metas?",
+            metaDesafiadora: "Pode compartilhar um exemplo de uma vez em que você teve que se esforçar muito para atingir uma meta desafiadora?",
+            papelCompeticao: "Como você enxerga o papel da competição no mercado em que atua?",
+            competicaoInovacao: "Você pode dar um exemplo de como a competição impulsionou a inovação ou a melhoria em um produto ou serviço?",
+            beneficiosCompeticao: "Em sua opinião, quais são os benefícios da competição para os consumidores e para as empresas?",
+            ambienteCompetitivo: "Você já trabalhou em um ambiente altamente competitivo? Como você lidou com essa dinâmica e quais foram os resultados?",
+            visaoLucro: "Qual é a sua visão sobre o lucro nas empresas? Como você o relaciona com a criação de valor para os clientes e para a sociedade?",
+            lucroBeneficios: "Você consegue citar um exemplo de como uma empresa, ao buscar o lucro, também gerou benefícios para outras partes interessadas (clientes, funcionários, comunidade)?",
+            focoLucroInfluencia: "Em sua experiência profissional, como o foco no lucro pode influenciar as decisões estratégicas da empresa em que você trabalha?",
+            responsabilidadeProjeto: "Descreva uma situação em que você assumiu total responsabilidade por um projeto ou resultado, mesmo diante de obstáculos. Qual foi o desfecho?",
+            desenvolvimentoProfissional: "Como você se mantém motivado e busca seu próprio desenvolvimento profissional, independentemente das oportunidades oferecidas pela empresa?",
+            identificouFalha: "Conte-me sobre uma vez em que você identificou uma falha ou um problema e tomou a iniciativa para resolvê-lo, sem que lhe fosse pedido.",
+            otimizarTempo: "Como você busca otimizar seu tempo e recursos para alcançar seus objetivos no trabalho? Pode dar um exemplo prático?",
+            importanciaEficiencia: "Em sua visão, qual é a importância da eficiência e produtividade para o sucesso de uma empresa e para a economia como um todo?",
+            melhoriaEficiencia: "Você já implementou alguma medida ou processo que resultou em melhoria significativa de eficiência ou produtividade? Conte-me sobre isso.",
+            papelGoverno: "Qual é a sua opinião sobre o papel do governo na economia? Você acredita que menos intervenção estatal pode beneficiar o crescimento econômico? Por quê?",
+            burocraciaImpacto: "Em sua visão, como a burocracia ou regulamentações excessivas podem impactar o ambiente de negócios e a inovação?",
+            liberdadeEconomicaContribuicao: "Você pode dar um exemplo de como a liberdade econômica contribui para a prosperidade de um setor ou de um país?",
+            oportunidadeMercado: "Descreva uma situação em que você identificou uma oportunidade de mercado não explorada. Como você agiu para capitalizá-la?",
+            pressaoResultados: "Como você lida com a pressão por resultados em um ambiente competitivo? Qual a importância da meritocracia para você?",
+            papelEmpreendedorismo: "Qual é a sua visão sobre o papel do empreendedorismo na economia? Você se considera um 'empreendedor de si mesmo'?",
+            inovarVenda: "Fale sobre uma ocasião em que você precisou inovar ou encontrar uma solução criativa para fechar uma venda?",
+            sucessoIndividualEmpresa: "Como você enxerga a relação entre o sucesso individual em vendas e o sucesso da empresa em um mercado livre?",
+            organizarTarefas: "Como você se organiza para garantir que as tarefas sejam cumpridas sem a necessidade de supervisão constante?",
+            proatividadeVendas: "Em sua experiência, qual é o papel da proatividade no sucesso em vendas? Pode dar um exemplo de como você aplicou isso?",
+            mudarAmbiente: "Conte-me sobre uma grande mudança que você teve que enfrentar em um ambiente de trabalho (por exemplo, mudança de produto, processo, equipe). Como você se adaptou a ela?",
+            desafioReves: "Descreva uma situação em que você enfrentou um desafio ou um revés significativo. Como você se recuperou e o que aprendeu com a experiência?",
+            lidarPressaoIncertezas: "Como você lida com a pressão e com as incertezas que são comuns na área de vendas?",
+            eticaIntegridade: "Em sua opinião, o que significa ter ética e integridade no ambiente de vendas? Pode dar um exemplo de como você aplicaria esses princípios em uma situação desafiadora?",
+            decisaoEtica: "Conte-me sobre uma situação em que você precisou tomar uma decisão difícil que envolvia questões éticas. Como você agiu?",
+            transparenciaHonestidade: "Como você garante a transparência e a honestidade no relacionamento com seus clientes e colegas?",
+            motivaVendas: "O que mais te motiva na área de vendas?",
+            atitudePositiva: "Como você mantém uma atitude positiva e o entusiasmo, mesmo em dias desafiadores ou quando as metas não são atingidas?",
+            entusiasmoImpacto: "Descreva uma situação em que seu entusiasmo ou sua energia impactaram positivamente uma negociação ou o relacionamento com um cliente.",
+            aprimoramentoProfissional: "Como você busca se aprimorar e se desenvolver profissionalmente? Quais são as últimas coisas que você aprendeu por conta própria?",
+            habilidadeDesenvolver: "Existe alguma habilidade que você percebeu que precisava desenvolver para ser mais eficaz? Como você a auto aprendeu?",
+            importanciaConhecimento: "Qual é a importância da busca contínua por conhecimento na área de vendas, em sua opinião?",
+            conheceEmpresa: "Você conhece nossa empresa, teve alguma experiência na área de celulares? Você reside em Amparo?",
+            disponibilidadeHorario: "Você possui disponibilidade para trabalhar no horário comercial do varejo de Amparo? Quanto ao horário, você costuma ser pontual?",
+            candidatoIdeal: "Explique por que você acredita ser o candidato ideal para a vaga e como pode contribuir para o sucesso da empresa."
+        };
+
+        function showCandidateDetails(id) {
+            showLoading(true);
+            try {
+                const candidates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+                const candidate = candidates.find(c => c.id === id);
+
+                if (candidate) {
+                    candidateDetailsTitle.textContent = `Detalhes de: ${candidate.nomeCompleto || 'Candidato Sem Nome'}`;
+                    candidateDetailsContent.innerHTML = ''; // Limpa conteúdo anterior
+
+                    // Garante que o modal comece no tamanho padrão
+                    candidateDetailsModalContent.classList.remove('modal-expanded');
+
+                    for (const key in questionLabels) { // Iterar sobre questionLabels para garantir ordem e todas as perguntas
+                        const questionText = questionLabels[key];
+                        const answerText = candidate[key] || 'Não respondido';
+                        const p = document.createElement('p');
+                        p.innerHTML = `<strong>${questionText}:</strong> <span>${answerText}</span>`;
+                        candidateDetailsContent.appendChild(p);
+                    }
+
+                    candidateDetailsModal.style.display = 'flex';
+                } else {
+                    showMessage('Candidato não encontrado para detalhes.', 'error');
+                }
+            } catch (e) {
+                console.error("Erro ao carregar detalhes do candidato: ", e);
+                showMessage(`Erro ao carregar detalhes do candidato: ${e.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function closeCandidateDetailsModal() {
+            candidateDetailsModal.style.display = 'none';
+            candidateDetailsContent.innerHTML = ''; // Limpa o conteúdo ao fechar
+            candidateDetailsModalContent.classList.remove('modal-expanded'); // Garante que o modal volte ao tamanho padrão
+        }
+
+        // Nova função para alternar o tamanho do modal de detalhes
+        function toggleModalSize() {
+            candidateDetailsModalContent.classList.toggle('modal-expanded');
+        }
+
+        // Função para gerar e fazer download de um arquivo HTML com os detalhes do candidato
+        function downloadCandidateDetails(id) {
+            showLoading(true);
+            try {
+                const candidates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+                const candidate = candidates.find(c => c.id === id);
+
+                if (candidate) {
+                    let htmlContent = `
+                        <!DOCTYPE html>
+                        <html lang="pt-br">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Formulário de Entrevista - ${candidate.nomeCompleto || 'Candidato'}</title>
+                            <style>
+                                body { font-family: 'Inter', sans-serif; line-height: 1.6; margin: 20px; color: #333; }
+                                h1 { text-align: center; color: #4c51bf; margin-bottom: 30px; }
+                                h2 { color: #2d3748; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+                                p { margin-bottom: 10px; line-height: 1.5; }
+                                p strong { display: block; margin-bottom: 5px; color: #4c51bf; }
+                                p span { display: block; margin-left: 10px; color: #4a5568; white-space: pre-wrap; word-wrap: break-word; }
+                                .section { margin-bottom: 20px; }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Formulário de Entrevista</h1>
+                            <h2>Informações do Candidato</h2>
+                            <p><strong>Nome Completo:</strong> <span>${candidate.nomeCompleto || 'N/A'}</span></p>
+                            <p><strong>Data da Entrevista:</strong> <span>${candidate.dataEntrevista || 'N/A'}</span></p>
+                            <p><strong>Nome do Avaliador:</strong> <span>${candidate.nomeAvaliador || 'N/A'}</span></p>
+                            <p><strong>Status da Candidatura:</strong> <span>${candidate.status || 'Pendente'}</span></p>
+                    `;
+
+                    // Adiciona todas as perguntas e respostas ao conteúdo HTML
+                    for (const key in questionLabels) {
+                        // Ignora os campos de informação já adicionados acima
+                        if (['nomeCompleto', 'dataEntrevista', 'nomeAvaliador', 'status'].includes(key)) {
+                            continue;
+                        }
+                        const questionText = questionLabels[key];
+                        const answerText = candidate[key] || 'Não respondido';
+                        htmlContent += `<p><strong>${questionText}:</strong> <span>${answerText}</span></p>`;
+                    }
+
+                    htmlContent += `
+                        </body>
+                        </html>
+                    `;
+
+                    const filename = `${candidate.nomeCompleto || 'Candidato'}_Entrevista.html`;
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url); // Libera o URL do objeto
+
+                    showMessage('Arquivo de respostas baixado com sucesso!', 'success');
+                } else {
+                    showMessage('Candidato não encontrado para download.', 'error');
+                }
+            } catch (e) {
+                console.error("Erro ao gerar ou baixar o arquivo: ", e);
+                showMessage(`Erro ao baixar arquivo: ${e.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+
+        // Funções para alternar a visibilidade das seções
+        function showForm() {
+            formSection.style.display = 'block';
+            candidatesListSection.style.display = 'none';
+            clearForm(); // Limpa o formulário ao alternar para ele
+        }
+
+        // Função chamada pelo botão "Candidatos Cadastrados"
+        function showCandidatesWithPasswordCheck() {
+            if (isAuthenticated) {
+                showCandidates();
+            } else {
+                showPasswordPrompt();
+            }
+        }
+
+        function showCandidates() {
+            formSection.style.display = 'none';
+            candidatesListSection.style.display = 'block';
+            loadCandidates(); // Carrega os candidatos ao alternar para a lista
+        }
+
+        // Expor funções para o escopo global para que possam ser chamadas pelos botões HTML
+        window.saveFormData = saveFormData;
+        window.showForm = showForm;
+        window.showCandidatesWithPasswordCheck = showCandidatesWithPasswordCheck;
+        window.showPasswordPrompt = showPasswordPrompt;
+        window.closePasswordModal = closePasswordModal;
+        window.checkPassword = checkPassword;
+        window.showCandidateDetails = showCandidateDetails;
+        window.closeCandidateDetailsModal = closeCandidateDetailsModal;
+        window.toggleModalSize = toggleModalSize;
+        window.downloadCandidateDetails = downloadCandidateDetails; // Nova função exposta
+        window.updateCandidateStatus = updateCandidateStatus; // Nova função exposta
+        window.deleteAllCandidatesWithPasswordCheck = deleteAllCandidatesWithPasswordCheck; // Nova função exposta
+        window.closeConfirmDeleteAllModal = closeConfirmDeleteAllModal; // Nova função exposta
+        window.confirmDeleteAll = confirmDeleteAll; // Nova função exposta
+        window.closePasswordForDeleteAllModal = closePasswordForDeleteAllModal; // Nova função exposta
+        window.checkPasswordForDeleteAll = checkPasswordForDeleteAll; // Nova função exposta
+    </script>
+</body>
+</html>
